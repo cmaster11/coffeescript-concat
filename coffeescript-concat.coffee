@@ -287,7 +287,13 @@ alias('o', 'output-file').
 describe('list-files', 'list file names instead of outputting file contents')
 
 argv = options.argv
-includeDirectories = if typeof argv.I is 'string' then [argv.I] else argv.I or []
+if typeof argv.I is 'string'
+	if argv.I.indexOf(':') isnt -1
+		includeDirectories = argv.I.split(':')
+	else
+		includeDirectories = [argv.I]
+else
+	includeDirectories = argv.I or []
 includeDirectoriesRecursive = if typeof argv.R is 'string' then [argv.R] else argv.R or []
 sourceFiles = if typeof argv._ is 'string' then [argv._] else argv._
 if argv.help || (includeDirectories.length==0 && includeDirectoriesRecursive.length==0 && sourceFiles.length==0)
